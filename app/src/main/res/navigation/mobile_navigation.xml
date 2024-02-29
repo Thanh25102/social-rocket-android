@@ -6,6 +6,12 @@
 	app:startDestination="@+id/navigation_home">
 
 	<fragment
+		android:id="@+id/navigation_chat"
+		android:name="tech.mobile.socialrocket.ui.chat.ChatFragment"
+		android:label="fragment_chat"
+		tools:layout="@layout/fragment_chat" />
+
+	<fragment
 		android:id="@+id/navigation_home"
 		android:name="tech.mobile.socialrocket.ui.home.HomeFragment"
 		android:label="@string/title_home"
@@ -22,9 +28,5 @@
 		android:name="tech.mobile.socialrocket.ui.notifications.NotificationsFragment"
 		android:label="@string/title_notifications"
 		tools:layout="@layout/fragment_notifications" />
-	<fragment
-		android:id="@+id/navigation_chat"
-		android:name="tech.mobile.socialrocket.ui.chat.ChatFragment"
-		android:label="fragment_chat"
-		tools:layout="@layout/fragment_chat" />
+
 </navigation>

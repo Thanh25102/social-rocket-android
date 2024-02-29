@@ -1,7 +1,7 @@
 
 package tech.mobile.socialrocket.data.remote.model;
 
-public class TodoApiRes {
+public class Todo {
     private Long id;
     private Boolean completed;
     private String title;

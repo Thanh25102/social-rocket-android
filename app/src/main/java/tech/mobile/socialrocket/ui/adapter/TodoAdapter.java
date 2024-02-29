@@ -3,26 +3,25 @@ package tech.mobile.socialrocket.ui.adapter;
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import tech.mobile.socialrocket.R;
-import tech.mobile.socialrocket.data.remote.model.TodoApiRes;
+import tech.mobile.socialrocket.data.remote.model.Todo;
 import tech.mobile.socialrocket.databinding.TodoItemsBinding;
 
 import java.util.List;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
 
-    private final List<TodoApiRes> todos;
+    private final List<Todo> todos;
 
-    public TodoAdapter(List<TodoApiRes> todos) {
+    public TodoAdapter(List<Todo> todos) {
         this.todos = todos;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setTodoList(List<TodoApiRes> todos) {
+    public void setTodoList(List<Todo> todos) {
         this.todos.clear();
         this.todos.addAll(todos);
         notifyDataSetChanged();
@@ -39,7 +38,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TodoAdapter.TodoViewHolder holder, int index) {
-        TodoApiRes todo = todos.get(index);
+        Todo todo = todos.get(index);
         holder.binding.setTodoViewModel(todo);
     }
 

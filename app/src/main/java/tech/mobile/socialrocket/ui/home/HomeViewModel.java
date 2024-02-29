@@ -1,68 +1,47 @@
 package tech.mobile.socialrocket.ui.home;
 
-import androidx.databinding.ObservableArrayList;
+import android.annotation.SuppressLint;
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observer;
+import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import org.jetbrains.annotations.NotNull;
-import tech.mobile.socialrocket.data.remote.api.ApiService;
-import tech.mobile.socialrocket.data.remote.model.TodoApiRes;
+import tech.mobile.socialrocket.SocialRocketApplication;
+import tech.mobile.socialrocket.data.remote.model.Todo;
+import tech.mobile.socialrocket.data.repo.interfaces.TodoRepo;
+import tech.mobile.socialrocket.di.AppContainer;
 
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
+    private final TodoRepo todoRepo;
     private final MutableLiveData<String> mText;
-    private MutableLiveData<List<TodoApiRes>> todos = new MutableLiveData<>();
+    private MutableLiveData<List<Todo>> todos = new MutableLiveData<>();
 
     private Disposable disposable;
     private ObservableBoolean isSuccessful = new ObservableBoolean();
 
 
-    public HomeViewModel() {
+    public HomeViewModel(TodoRepo todoRepo) {
+        this.todoRepo = todoRepo;
+
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
 
+    @SuppressLint("CheckResult")
     public void getRemoteTodos() {
-        Observer<List<TodoApiRes>> observer = new Observer<List<TodoApiRes>>() {
-            @Override
-            public void onSubscribe(@NotNull Disposable d) {
-                setDisposable(d);
-            }
-
-            @Override
-            public void onNext(@NotNull List<TodoApiRes> todoApiRes) {
-                handleResult(todoApiRes);
-            }
-
-            @Override
-            public void onError(@NotNull Throwable e) {
-                handleError(e);
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-        ApiService.apiService.getTodos().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        todoRepo.getTodos().subscribe(
+                todosRes -> {
+                    todos.setValue(todosRes);
+                    isSuccessful.set(true);
+                },
+                throwable -> isSuccessful.set(false)
+        );
     }
 
-    public void handleResult(List<TodoApiRes> todoApiRes) {
-        todos.setValue(todoApiRes);
-        isSuccessful.set(true);
-    }
-
-    public void handleError(Throwable throwable) {
-        isSuccessful.set(false);
-    }
 
     public LiveData<String> getText() {
         return mText;
@@ -76,11 +55,11 @@ public class HomeViewModel extends ViewModel {
         this.disposable = disposable;
     }
 
-    public MutableLiveData<List<TodoApiRes>> getTodos() {
+    public MutableLiveData<List<Todo>> getTodos() {
         return todos;
     }
 
-    public void setTodos(MutableLiveData<List<TodoApiRes>> todos) {
+    public void setTodos(MutableLiveData<List<Todo>> todos) {
         this.todos = todos;
     }
 
@@ -91,4 +70,12 @@ public class HomeViewModel extends ViewModel {
     public void setIsSuccessful(ObservableBoolean isSuccessful) {
         this.isSuccessful = isSuccessful;
     }
+
+    static ViewModelInitializer<HomeViewModel> Initializer = new ViewModelInitializer<>(
+            HomeViewModel.class,
+            creationExtras -> {
+                AppContainer appContainer = SocialRocketApplication.getInstance().appContainer;
+                return new HomeViewModel(appContainer.todoRepo);
+            }
+    );
 }

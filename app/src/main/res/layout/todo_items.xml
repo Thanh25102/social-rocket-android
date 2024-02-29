@@ -4,7 +4,7 @@
 	<data>
 		<variable
 			name="TodoViewModel"
-			type="tech.mobile.socialrocket.data.remote.model.TodoApiRes" />
+			type="tech.mobile.socialrocket.data.remote.model.Todo" />
 	</data>
 
 	<LinearLayout
