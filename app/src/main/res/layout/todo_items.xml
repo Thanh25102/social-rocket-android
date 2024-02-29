@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<data>
+		<variable
+			name="TodoViewModel"
+			type="tech.mobile.socialrocket.data.remote.model.TodoApiRes" />
+	</data>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="1dp"
+		android:layout_marginEnd="1dp"
+		android:layout_marginStart="1dp"
+		android:layout_marginBottom="8dp"
+		android:padding="10dp">
+		<TextView
+			android:layout_width="20dp"
+			android:layout_height="wrap_content"
+			android:text="@{TodoViewModel.id.toString()}"
+			android:lines="1"
+			android:ellipsize="end"
+			android:textColor="@color/black"
+			android:textSize="14sp" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{TodoViewModel.title}"
+			android:lines="1"
+			android:ellipsize="end"
+			android:textColor="@color/black"
+			android:textSize="14sp" />
+	</LinearLayout>
+</layout>
